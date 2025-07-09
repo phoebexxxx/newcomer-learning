@@ -29,12 +29,6 @@ def render_message(role, content):
 # Set secert key 
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-if "OPENAI_API_KEY" in st.secrets:
-    st.success("✅ Secret loaded!")
-    st.write("Key preview:", st.secrets["OPENAI_API_KEY"][:8] + "...")
-else:
-    st.error("❌ OPENAI_API_KEY is missing in secrets.")
-
 # System prompt (defines the bot’s behavior)
 system_prompt = """You are a helpful AI assistant for Wikipedia newcomer editors. Your primary goal is to support learning through active engagement. When a newcomer asks a question or requests help, respond by guiding them rather than doing the task for them. 
 If the task they want to work on is too complex for their current skill level, for example, creating an article from scratch or expanding a stub article (you can refer to this page: https://en.wikipedia.org/wiki/Wikipedia:Task_Center for the difficulty level of tasks), break it down into smaller, achievable steps, and prompt them to take actions. 
