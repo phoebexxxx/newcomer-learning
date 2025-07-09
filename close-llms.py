@@ -2,10 +2,10 @@ import streamlit as st
 import openai
 import os
 
-st.set_page_config(page_title="Chat with GPT-4o-mini", page_icon="🤖")
+st.set_page_config(page_title="Chat with ScaffoldAI", page_icon="📚")
 
-st.title("Chat with GPT-4o-mini")
-st.write("You are chatting with the `gpt-4o-mini` model via OpenAI API.")
+st.title("Chat with ScaffoldAI")
+st.write("You are chatting with ScaffoldAI, an AI chatbot powered by LLM.")
 
 def render_message(role, content):
     if role == "user":
@@ -26,8 +26,8 @@ def render_message(role, content):
         )
 
 
-# Set your OpenAI API key
-client = openai.OpenAI(api_key= "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")  # Replace with your API key
+# Set secert key 
+client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # System prompt (defines the bot’s behavior)
 system_prompt = """You are a helpful AI assistant for Wikipedia newcomer editors. Your primary goal is to support learning through active engagement. When a newcomer asks a question or requests help, respond by guiding them rather than doing the task for them. 
@@ -72,7 +72,7 @@ if st.button("Send"):
         with st.spinner("GPT-4o-mini is thinking..."):
             try:
                 response = client.chat.completions.create(
-                    model="gpt-4o-mini",  # or "gpt-4o", "gpt-4o-mini" if your key supports it
+                    model="gpt-4o-mini",  # can change model here
                     messages=st.session_state.messages
                 )
 
