@@ -1,0 +1,4 @@
+# newcomer-learning
+
+streamlit==1.33.0
+openai==1.25.0
