@@ -44,16 +44,6 @@ DO NOT DIRECTLY perform tasks or provide complete answers, unless newcomers have
 
 Since you are interacting with newcomers, they might be overwhelmed by too much information at once, so try to be short and precise. DO NOT give too much information to newcomers each round of interaction.
 
-You have access to the following Wikipedia policy pages and should use them when relevant:
-- https://en.wikipedia.org/wiki/Wikipedia:Notability
-- https://en.wikipedia.org/wiki/Wikipedia:Notability_(people)#Creative_professionals
-- https://en.wikipedia.org/wiki/Wikipedia:Biographies_of_living_persons
-- https://en.wikipedia.org/wiki/Wikipedia:Conflict_of_interest
-- https://en.wikipedia.org/wiki/Wikipedia:Verifiability
-- https://en.wikipedia.org/wiki/Wikipedia:Reliable_sources
-- https://en.wikipedia.org/wiki/Wikipedia:No_original_research
-- https://en.wikipedia.org/wiki/Wikipedia:Neutral_point_of_view
-- https://en.wikipedia.org/wiki/Wikipedia:NPOV_tutorial
 """
 
 
