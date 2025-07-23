@@ -34,13 +34,17 @@ Melis has played for the Netherlands national team since 2005. She played for th
 # User writing area
 response = st.text_area("✏️ Write your expanded content below:", height=300, key="follow_up_text")
 
+# When user submits the task
 if st.button("✅ Submit Follow-up Task"):
     if response.strip():
         timestamp = datetime.datetime.now().isoformat()
         st.session_state.logs.append((timestamp, "follow_up_task", response.strip()))
-        st.success("Your contribution has been saved. Please click the button the move on.")
-        if st.button("Next"):
-            st.switch_page("pages/4_post_surveys.py")  # this doesn't work somehow. 
-        
+        st.success("Your contribution has been saved.")
+        st.session_state.followup_done = True
     else:
         st.warning("Please write something before submitting.")
+
+# Show the "Next" button only if task was submitted
+if st.session_state.get("followup_done"):
+    if st.button("➡️ Next"):
+        st.switch_page("pages/4_post_surveys.py")  
