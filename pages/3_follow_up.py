@@ -1,8 +1,25 @@
 import streamlit as st
 import datetime
+from streamlit_autorefresh import st_autorefresh
+
+# Optional: Protect this page
+# ✅ Protect this page
+if not st.session_state.get("sandbox") or not st.session_state.get("count") or st.session_state["count"] < 6:
+    st.warning("🚫 Please complete the Main Study task before proceeding.")
+    st.stop()
 
 st.set_page_config(page_title="Follow Up", layout="wide")
 st.title("🧩 Your Next Wikipedia Task")
+
+def log_event(AorH, component, content):
+    st.session_state.logs.append({
+        "AorH": AorH,
+        "PID": st.session_state["participant_id"], 
+        "group": st.session_state["group"],
+        "component": component,
+        "timestamp": datetime.datetime.now().isoformat(),
+        "content": content
+    })
 
 st.markdown("""
 ### 📝 Task Description
@@ -32,13 +49,24 @@ Melis has played for the Netherlands national team since 2005. She played for th
 """, unsafe_allow_html=True)
 
 # User writing area
-response = st.text_area("✏️ Write your expanded content below:", height=300, key="follow_up_text")
+st.session_state["follow_up"] = st.text_area(
+    label="✏️ Write your expanded content below:",
+    height=300,
+    key="follow_up_text"
+)
+
+# 🔁 Automatically rerun the app every 1 second
+st_autorefresh(interval=15000, key="datarefresh")
+
+content = st.session_state.get("follow_up", "").strip()
+log_event("human", "taskw/oAI", content)
 
 # When user submits the task
 if st.button("✅ Submit Follow-up Task"):
-    if response.strip():
-        timestamp = datetime.datetime.now().isoformat()
-        st.session_state.logs.append((timestamp, "follow_up_task", response.strip()))
+    if content:
+        # timestamp = datetime.datetime.now().isoformat()
+        # st.session_state.logs.append((timestamp, "follow_up_task", response.strip()))
+        log_event("human", "taskw/oAI", content)
         st.success("Your contribution has been saved.")
         st.session_state.followup_done = True
     else:
