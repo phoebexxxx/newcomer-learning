@@ -1,5 +1,9 @@
 import streamlit as st
 
+if not st.session_state.get("followup_done"): 
+    st.warning("Please finish Follow Up first.")
+    st.stop()
+
 st.set_page_config(page_title="Post Task Surveys", layout="wide")
 st.title("🧠 Post-Task Surveys")
 
@@ -25,4 +29,5 @@ with right_col:
     st.components.v1.iframe(src=survey_2_url, height=500, width=450, scrolling=True)
 
 if st.button("Next"):
+    st.session_state.post_surveys_done = True  # ✅ set the flag
     st.switch_page("pages/5_conclusion.py")  

@@ -1,6 +1,7 @@
 import streamlit as st
 import openai
 import datetime
+from streamlit_autorefresh import st_autorefresh
 
 # Optional: Protect this page
 if not st.session_state.get("participant_id") or not st.session_state.get("group"):
@@ -9,6 +10,8 @@ if not st.session_state.get("participant_id") or not st.session_state.get("group
 
 st.set_page_config(page_title="Wikipedia Assistant", layout="wide")
 st.title("Wikipedia Editing Assistant")
+
+
 
 #st.set_page_config(page_title="Chat with GPT-4o-mini", page_icon="🤖", layout="wide")
 
@@ -21,8 +24,23 @@ if "messages" not in st.session_state:
         "role": "system",
         "content": """You are a helpful AI assistant for Wikipedia newcomer editors..."""  # Truncated for brevity
     }]
+
+
+
 if "logs" not in st.session_state:
     st.session_state.logs = []
+
+
+def log_event(AorH, component, content):
+    st.session_state.logs.append({
+        "AorH": AorH,
+        "PID": st.session_state["participant_id"], 
+        "group": st.session_state["group"],
+        "component": component,
+        "timestamp": datetime.datetime.now().isoformat(),
+        "content": content
+    })
+
 
 # Initialize OpenAI client
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -45,6 +63,7 @@ def render_message(role, content):
             </div>
             """, unsafe_allow_html=True
         )
+
 
 # Layout with two columns
 left_col, right_col = st.columns([1.25, 1.25])
@@ -87,20 +106,36 @@ with left_col:
     st.session_state["sandbox"] = st.text_area(
         label="Write your new content or revision in Wikitext here:",
         height=300,
-        key="sandbox_input"
+        key="immediate"
     )
+
+    # 🟡 Function to log the sandbox content every 15 seconds
+    # if "auto_log_time" not in st.session_state:
+    #     st.session_state.auto_log_time = time.time()
+    # if "sandbox_history" not in st.session_state:
+    #     st.session_state.sandbox_history = []
+
+    # 🔁 Automatically rerun the app every 1 second
+    st_autorefresh(interval=15000, key="datarefresh")
+    
+    content = st.session_state.get("sandbox", "").strip()
+    log_event("human", "taskw/AI", content)
 
     # Submit button
     if st.button("✅ Submit Draft"):
         task_content = st.session_state["sandbox"].strip()
 
         if task_content:
-            timestamp = datetime.datetime.now().isoformat()
-            st.session_state.logs.append((timestamp, "task", task_content))
+            # timestamp = datetime.datetime.now().isoformat()
+            log_event("human", "taskw/AI", task_content)
+            # st.session_state.logs.append((timestamp, "task", task_content))
             st.success("✅ Your draft has been submitted and added to logs.")
         else:
             st.warning("Please write something before submitting.")
 
+
+if "count" not in st.session_state:
+    st.session_state.count = 0
 
 # Right column: AI interaction
 with right_col:
@@ -113,14 +148,18 @@ with right_col:
 
     user_input = st.text_area("Enter your prompt:", key="user_input", height=100)
 
+    st_autorefresh(interval=30000, key="ai_input_refresh")
+    log_event("human", "taskw/AI", user_input)      # need to test this logging behavior
+
     if st.button("Send"):
         if user_input.strip() == "":
             st.warning("Please enter a prompt.")
         else:
             st.session_state.messages.append({"role": "user", "content": user_input})
-            st.session_state.logs.append(
-                (datetime.datetime.now().isoformat(), "user", user_input)
-            )
+            log_event("human", "interactw/AI", user_input)
+            # st.session_state.logs.append(
+            #     (datetime.datetime.now().isoformat(), "user", user_input)
+            # )
 
             with st.spinner("GPT-4o-mini is thinking..."):
                 try:
@@ -130,9 +169,11 @@ with right_col:
                     )
                     assistant_reply = response.choices[0].message.content
                     st.session_state.messages.append({"role": "assistant", "content": assistant_reply})
-                    st.session_state.logs.append(
-                        (datetime.datetime.now().isoformat(), "assistant", assistant_reply)
-                    )
+                    log_event("AI", "interactw/AI", assistant_reply)
+                    st.session_state.count = st.session_state.count + 1      # enforce users to have at least 6 interactions (interaction = input + response)
+                    # st.session_state.logs.append(
+                    #     (datetime.datetime.now().isoformat(), "assistant", assistant_reply)
+                    # )
 
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
@@ -140,22 +181,27 @@ with right_col:
             st.rerun()
 
 # Navigation
-if st.session_state["sandbox"].strip() and st.session_state.logs:  # this and is not working
-    st.markdown("Please click the button to move on.")
-    if st.button("Next"):
-        st.switch_page("pages/3_follow_up.py")  
+if st.session_state["sandbox"].strip():
+    if st.session_state.count >= 6: 
+        st.markdown("Please click the button to move on.")
+        if st.button("Next"):
+            st.switch_page("pages/3_follow_up.py")
+    else:
+        st.warning(f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.''')
 else:
-    st.warning("Please complete both fields to continue.")
+    st.warning("Please submit your finished draft.")
+
+        
 
 # Optional: Export logs
-with st.expander("📁 Export Logs"):
-    if st.session_state.logs:
-        log_text = "\n\n".join(
-            [f"[{t}] {r.upper()}: {c}" for t, r, c in st.session_state.logs]
-        )
-        st.download_button("Download Logs as Text File", log_text, file_name="chat_logs.txt")
-    else:
-        st.write("No logs to export yet.")
+# with st.expander("📁 Export Logs"):
+#     if st.session_state.logs:
+#         log_text = "\n\n".join(
+#             [f"[{t}] {r.upper()}: {c}" for t, r, c in st.session_state.logs]
+#         )
+#         st.download_button("Download Logs as Text File", log_text, file_name="chat_logs.txt")
+#     else:
+#         st.write("No logs to export yet.")
 
 
 
