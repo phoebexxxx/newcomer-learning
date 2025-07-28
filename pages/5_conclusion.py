@@ -1,4 +1,11 @@
 import streamlit as st
+import pandas as pd 
+import io
+
+if not st.session_state.get("post_surveys_done"):
+    st.warning("Please complete the post surveys before you conclude.")
+    st.stop()
+
 
 st.set_page_config(page_title="Finish & Download", layout="wide")
 st.title("🎉 You're All Done!")
@@ -9,8 +16,26 @@ Thank you for participating in this study.
 If you'd like to download a copy of your interaction log, click the button below.
 """)
 
+# if "logs" in st.session_state and st.session_state.logs:
+#     log_text = "\n\n".join([f"[{t}] {r.upper()}: {c}" for t, r, c in st.session_state.logs])
+#     st.download_button("📁 Download Interaction Log", log_text, file_name="interaction_log.txt")
+# else:
+#     st.info("No interaction logs found.")
+
 if "logs" in st.session_state and st.session_state.logs:
-    log_text = "\n\n".join([f"[{t}] {r.upper()}: {c}" for t, r, c in st.session_state.logs])
-    st.download_button("📁 Download Interaction Log", log_text, file_name="interaction_log.txt")
+    # Create DataFrame from structured logs
+    df = pd.DataFrame(st.session_state.logs)
+
+    # Create in-memory buffer to hold CSV
+    csv_buffer = io.StringIO()
+    df.to_csv(csv_buffer, index=False)
+
+    # Download button for CSV
+    st.download_button(
+        label="📁 Download Interaction Log (CSV)",
+        data=csv_buffer.getvalue(),
+        file_name="interaction_log.csv",
+        mime="text/csv"
+    )
 else:
     st.info("No interaction logs found.")
