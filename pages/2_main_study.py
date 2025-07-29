@@ -178,7 +178,7 @@ with right_col:
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
 
-            #st.rerun()
+            st.rerun()
 
 st.markdown("""
             
