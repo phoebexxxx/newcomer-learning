@@ -4,7 +4,7 @@ from streamlit_autorefresh import st_autorefresh
 
 # Optional: Protect this page
 # ✅ Protect this page
-if not st.session_state.get("sandbox") or not st.session_state.get("count") or st.session_state["count"] < 6:
+if st.session_state["count"] < 6:
     st.warning("Please complete the main study before proceeding.")
     st.stop()
 

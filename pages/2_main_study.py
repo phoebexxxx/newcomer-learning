@@ -39,6 +39,7 @@ def log_event(AorH, component, content):
 # Initialize OpenAI client
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
+
 # Function to render messages
 def render_message(role, content):
     if role == "user":
@@ -115,7 +116,7 @@ with left_col:
     # if "sandbox_history" not in st.session_state:
     #     st.session_state.sandbox_history = []
 
-    # 🔁 Automatically rerun the app every 1 second
+    # 🔁 Automatically rerun the app every 15 second
     st_autorefresh(interval=15000, key="datarefresh")
     
     content = st.session_state.get("sandbox", "").strip()
@@ -124,6 +125,7 @@ with left_col:
     # Submit button
     if st.button("Submit Draft"):
         task_content = st.session_state["sandbox"].strip()
+        st.session_state.ai_task = True
 
         if task_content:
             # timestamp = datetime.datetime.now().isoformat()
@@ -148,8 +150,8 @@ with right_col:
 
     user_input = st.text_area("Enter your question or request:", key="user_input", height=100)
 
-    st_autorefresh(interval=30000, key="ai_input_refresh")
-    log_event("human", "taskw/AI", user_input)      # need to test this logging behavior
+    #st_autorefresh(interval=30000, key="ai_input_refresh")
+    #log_event("human", "taskw/AI", user_input)      # need to test this logging behavior
 
     if st.button("Send"):
         if user_input.strip() == "":
@@ -186,7 +188,7 @@ st.markdown("""
 """)
 
 # Navigation
-if st.session_state["sandbox"].strip():
+if st.session_state.get("ai_task"):
     if st.session_state.count >= 6: 
         st.markdown(
         "<div style='text-align: center; color: #155724; background-color: #d4edda; padding: 1em; border-radius: 5px; border: 1px solid #c3e6cb;'>"
