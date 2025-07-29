@@ -8,19 +8,14 @@ if not st.session_state.get("post_surveys_done"):
 
 
 st.set_page_config(page_title="Finish & Download", layout="wide")
-st.title("🎉 You're All Done!")
+st.title("Download your logs")
 
 st.markdown("""
-Thank you for participating in this study.
 
-If you'd like to download a copy of your interaction log, click the button below.
+Before concluding, please make sure to download the logs from the following button, and send to the researcher right now. 
+Feel free to keep a copy with you as well.        
+
 """)
-
-# if "logs" in st.session_state and st.session_state.logs:
-#     log_text = "\n\n".join([f"[{t}] {r.upper()}: {c}" for t, r, c in st.session_state.logs])
-#     st.download_button("📁 Download Interaction Log", log_text, file_name="interaction_log.txt")
-# else:
-#     st.info("No interaction logs found.")
 
 if "logs" in st.session_state and st.session_state.logs:
     # Create DataFrame from structured logs
@@ -39,3 +34,17 @@ if "logs" in st.session_state and st.session_state.logs:
     )
 else:
     st.info("No interaction logs found.")
+
+
+st.markdown("""
+            
+🎉 You are all done! Thank you so much for participating in this study. We truly value your participation. 
+            
+""")
+
+# if "logs" in st.session_state and st.session_state.logs:
+#     log_text = "\n\n".join([f"[{t}] {r.upper()}: {c}" for t, r, c in st.session_state.logs])
+#     st.download_button("📁 Download Interaction Log", log_text, file_name="interaction_log.txt")
+# else:
+#     st.info("No interaction logs found.")
+

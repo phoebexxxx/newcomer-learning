@@ -5,32 +5,26 @@ from streamlit_autorefresh import st_autorefresh
 
 # Optional: Protect this page
 if not st.session_state.get("participant_id") or not st.session_state.get("group"):
-    st.warning("Please complete the Participant Info page first.")
+    st.warning("Please complete the participant info before proceeding.")
     st.stop()
 
-st.set_page_config(page_title="Wikipedia Assistant", layout="wide")
-st.title("Wikipedia Editing Assistant")
+# Initialize session state
+st.set_page_config(page_title="Main Study", layout="wide")
+st.title("Wikipedia Editing Task")
 
 
-
-#st.set_page_config(page_title="Chat with GPT-4o-mini", page_icon="🤖", layout="wide")
-
-    # Set up the page
-    #st.title("Wikipedia Editing Assistant: GPT-4o-mini")
-
-    # Initialize session state
+# this will be the different types of AI interactions
 if "messages" not in st.session_state:
     st.session_state.messages = [{
         "role": "system",
-        "content": """You are a helpful AI assistant for Wikipedia newcomer editors..."""  # Truncated for brevity
+        "content": """You are a helpful AI assistant for Wikipedia newcomer editors...""" 
     }]
 
-
-
+# initialize logs 
 if "logs" not in st.session_state:
     st.session_state.logs = []
 
-
+# helper function to log data into a pandas dataframe 
 def log_event(AorH, component, content):
     st.session_state.logs.append({
         "AorH": AorH,
@@ -71,40 +65,46 @@ left_col, right_col = st.columns([1.25, 1.25])
 
 # Left column: user editing sandbox
 with left_col:
-    st.subheader("📝 Your Editing Sandbox")
+    st.subheader("✍️ Task Description")
 
-    st.markdown("### 📌 Task Description")
     st.markdown("""
-    The article **Bronwyn Oliver** on Wikipedia is currently a stub, meaning it is short and needs expansion, such that readers can access more information about her.
+    The article ***Bronwyn Oliver*** on Wikipedia is currently a stub, meaning it is short and needs improvement, so that readers can learn more about her.
 
     **Your task:**  
-    Expand this article by adding **150–200 words** and including **at least 3 references** to support the information you add.  
+    Expand this article by adding ***150–200 words*** and including ***at least 3 references*** to support the information you add.  
+    
     ⏰ **Time limit:** 25 minutes
 
-    🚫 Please **do not** open or read the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
-    ✅ You should gather information from sources **outside of Wikipedia**.  
-    ✍️ Please write your contribution in **wikitext format**. If you're unfamiliar with wikitext, the AI assistant can help you.
-
-    You must have at least **6 interactions** with the AI assistant during the task.  
-    One question from you and one answer from the AI count as 1 interaction.
+    1. Please **DO NOT** open or read the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
+    2. You should gather information from sources **outside of Wikipedia**.  
+    3. The wiki-helper AI assistant is waiting on the right, ready to support you. You must have at least **6 interactions** with the AI assistant during the task. *1 interaction = 1 question/request + 1 answer/response.*
+                You can ask the AI assistant anything, for example, “Can you help me expand the article?” “Help me find a source!” “Evaluate my edit!” 
+    4. The reference list is a simplified version. 
+    5. Please write your edit in natural sentences, and provide links to your references if you could. 
 
     ---
     """)
 
-    st.markdown("### 🧾 Current Stub Article Content")
+    st.markdown("### 🧾 Current Article Content")
     st.markdown("""
-    <div style='background-color:#f5f5f5; padding:15px; border-radius:8px; overflow-x:auto; width:90%; max-width:700px; font-family: monospace; font-size: 11px; white-space: pre-wrap;'><b>Bronwyn Oliver</b> (1959–2006) was an Australian sculptor, whose works were primarily made in metal.
-    Oliver was born at Gum Flat, west of Inverell, New South Wales, and studied and worked in Sydney.
+    <div style='background-color:#f5f5f5; padding:15px; border-radius:8px; overflow-x:auto; width:90%; max-width:700px; font-family: monospace; font-size: 13px; white-space: pre-wrap;'><b>Bronwyn Oliver</b> (1959–2006) was an Australian sculptor, whose works were primarily made in metal.
+    Oliver was born at Gum Flat, west of Inverell, New South Wales, and studied and worked in Sydney [1].
     Oliver graduated from the College of Fine Arts (COFA), then known as the Alexander Mackie College of Advanced Education in 1980.
-    Oliver's major works included Vine, a 16 metre high sculpture installed in the refurbished Sydney Hilton. Her work is held in a range of major collections, including the Art Gallery of New South Wales.
+    Oliver's major works included Vine, a 16 metre high sculpture installed in the refurbished Sydney Hilton. Her work is held in a range of major collections, including the Art Gallery of New South Wales [2].
     Oliver committed suicide on 11 July 2006.
+    <br><b>References</b> 
+    [1] Sydney Morning Herald
+    [2] Art Gallery of New South Wales Contemporary Collection Handbook
     </div>
+    
+    ---
     """, unsafe_allow_html=True)
 
-    st.markdown("### ✏️ Draft Your Expanded Version")
+
+    st.markdown("### 📝 Your Editing Sandbox")
     
     st.session_state["sandbox"] = st.text_area(
-        label="Write your new content or revision in Wikitext here:",
+        label="Write your content or revision here:",
         height=300,
         key="immediate"
     )
@@ -122,7 +122,7 @@ with left_col:
     log_event("human", "taskw/AI", content)
 
     # Submit button
-    if st.button("✅ Submit Draft"):
+    if st.button("Submit Draft"):
         task_content = st.session_state["sandbox"].strip()
 
         if task_content:
@@ -131,22 +131,22 @@ with left_col:
             # st.session_state.logs.append((timestamp, "task", task_content))
             st.success("✅ Your draft has been submitted and added to logs.")
         else:
-            st.warning("Please write something before submitting.")
+            st.warning("❌ Please write something before submitting.")
 
-
+# initialize counter to ensure at least 6 interactions
 if "count" not in st.session_state:
     st.session_state.count = 0
 
 # Right column: AI interaction
 with right_col:
 
-    st.subheader("🤖 Chat with GPT-4o-mini")
-    st.write("You are chatting with the `gpt-4o-mini` model via OpenAI API.")
+    st.subheader("🤖 Chat with Wiki-helper AI.")
+    st.write("Ask questions or requests about editing Wikipedia! If the assistant didn't respond, it is likely because it didn't hear. Simply send your question or request again! It may take some time for the assistant to think.")
 
     for message in st.session_state.messages[1:]:  # Skip system message
         render_message(message["role"], message["content"])
 
-    user_input = st.text_area("Enter your prompt:", key="user_input", height=100)
+    user_input = st.text_area("Enter your question or request:", key="user_input", height=100)
 
     st_autorefresh(interval=30000, key="ai_input_refresh")
     log_event("human", "taskw/AI", user_input)      # need to test this logging behavior
@@ -161,7 +161,7 @@ with right_col:
             #     (datetime.datetime.now().isoformat(), "user", user_input)
             # )
 
-            with st.spinner("GPT-4o-mini is thinking..."):
+            with st.spinner("Wiki-helper AI is thinking..."):
                 try:
                     response = client.chat.completions.create(
                         model="gpt-4o-mini",
@@ -180,16 +180,38 @@ with right_col:
 
             st.rerun()
 
+st.markdown("""
+            
+---
+""")
+
 # Navigation
 if st.session_state["sandbox"].strip():
     if st.session_state.count >= 6: 
-        st.markdown("Please click the button to move on.")
+        st.markdown(
+        "<div style='text-align: center; color: #155724; background-color: #d4edda; padding: 1em; border-radius: 5px; border: 1px solid #c3e6cb;'>"
+        "Please click the button below to continue."
+        "</div>",
+        unsafe_allow_html=True
+        )
+
         if st.button("Next"):
             st.switch_page("pages/3_follow_up.py")
     else:
-        st.warning(f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.''')
+        st.markdown(
+        "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
+        f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.'''
+        "</div>",
+        unsafe_allow_html=True
+        )
+        # st.warning(f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.''')
 else:
-    st.warning("Please submit your finished draft.")
+    st.markdown(
+    "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
+    "Please submit your finished draft."
+    "</div>",
+    unsafe_allow_html=True
+    )
 
         
 
