@@ -2,6 +2,7 @@ import streamlit as st
 import openai
 import datetime
 from streamlit_autorefresh import st_autorefresh
+from agents import agent_a, agent_d
 
 # Optional: Protect this page
 if not st.session_state.get("participant_id") or not st.session_state.get("group"):
@@ -13,11 +14,21 @@ st.set_page_config(page_title="Main Study", layout="wide")
 st.title("Wikipedia Editing Task")
 
 
+group = st.session_state.get("group")
+GROUP_AGENT_MAP = {
+    "Group A": agent_a.system_prompt(),
+    "Group D": agent_d.system_prompt()
+}
+
+system_prompt = GROUP_AGENT_MAP[group]
+print(system_prompt)
+
+
 # this will be the different types of AI interactions
 if "messages" not in st.session_state:
     st.session_state.messages = [{
         "role": "system",
-        "content": """You are a helpful AI assistant for Wikipedia newcomer editors...""" 
+        "content": system_prompt 
     }]
 
 # initialize logs 
@@ -147,6 +158,8 @@ with right_col:
 
     for message in st.session_state.messages[1:]:  # Skip system message
         render_message(message["role"], message["content"])
+    
+
 
     user_input = st.text_area("Enter your question or request:", key="user_input", height=100)
 
@@ -167,7 +180,8 @@ with right_col:
                 try:
                     response = client.chat.completions.create(
                         model="gpt-4o-mini",
-                        messages=st.session_state.messages
+                        messages=st.session_state.messages,
+                    
                     )
                     assistant_reply = response.choices[0].message.content
                     st.session_state.messages.append({"role": "assistant", "content": assistant_reply})
@@ -264,22 +278,22 @@ else:
 
 
 # # System prompt for scaffolding but no RAG (defines the bot’s behavior)
-# # system_prompt = """You are a helpful AI assistant for Wikipedia newcomer editors. Your primary goal is to support learning through active engagement and granular level of information. When a newcomer asks a question or requests help, respond by guiding them rather than doing the task for them. 
+# system_prompt = """You are a helpful AI assistant for Wikipedia newcomer editors. Your primary goal is to support learning through active engagement and granular level of information. When a newcomer asks a question or requests help, respond by guiding them rather than doing the task for them. 
 
-# # When the newcomer asks a question before they make any attempts, first articulate user intent, so that you have a clear idea about the user’s [task] for an article about [topic]. Then retrieval from Wikipedia policies pages regarding this type of edit. For example, if the topic is biographies, you may want to talk about Manual of style/biography and biographies of living persons. 
+# When the newcomer asks a question before they make any attempts, first articulate user intent, so that you have a clear idea about the user’s [task] for an article about [topic]. Then retrieval from Wikipedia policies pages regarding this type of edit. For example, if the topic is biographies, you may want to talk about Manual of style/biography and biographies of living persons. 
 
-# # If the task the newcomer wants to work on is too complex for their current skill level, for example, creating an article from scratch or expanding a stub article (you can refer to this page: https://en.wikipedia.org/wiki/Wikipedia:Task_Center for the difficulty level of tasks), break it down into smaller, achievable steps, and prompt them to take actions. 
+# If the task the newcomer wants to work on is too complex for their current skill level, for example, creating an article from scratch or expanding a stub article (you can refer to this page: https://en.wikipedia.org/wiki/Wikipedia:Task_Center for the difficulty level of tasks), break it down into smaller, achievable steps, and prompt them to take actions. 
 
-# # When a newcomer makes some attempts and asks for feedback, use your retrieval capabilities to simulate community response by referencing relevant Wikipedia content policies (e.g., Neutral point of view, Verifiability, No original research). Please also consider user intent again, and retrieve more relevant and specific to the particular topic that newcomers are working on. Provide responses from diverse perspectives such as experienced editors, readers, and/or other newcomer editors. 
+# When a newcomer makes some attempts and asks for feedback, use your retrieval capabilities to simulate community response by referencing relevant Wikipedia content policies (e.g., Neutral point of view, Verifiability, No original research). Please also consider user intent again, and retrieve more relevant and specific to the particular topic that newcomers are working on. Provide responses from diverse perspectives such as experienced editors, readers, and/or other newcomer editors. 
 
-# # Once the newcomer finishes a task, provide a reflective summary of what they did and what they learned, along with encouragement to continue contributing. 
+# Once the newcomer finishes a task, provide a reflective summary of what they did and what they learned, along with encouragement to continue contributing. 
 
-# # DO NOT DIRECTLY perform tasks or provide complete answers, unless newcomers have already attempted to make edits, expressed clear frustration of being stuck, or ask explicitly for an example. Even when newcomers try to ask for example, do not directly give answers about the topic they are editing, but some examples that are along similar topics. 
-# # Prioritize participation, engagement, and reflection. You can reject their question softly by saying you can't. 
+# DO NOT DIRECTLY perform tasks or provide complete answers, unless newcomers have already attempted to make edits, expressed clear frustration of being stuck, or ask explicitly for an example. Even when newcomers try to ask for example, do not directly give answers about the topic they are editing, but some examples that are along similar topics. 
+# Prioritize participation, engagement, and reflection. You can reject their question softly by saying you can't. 
 
-# # Since you are interacting with newcomers, they might be overwhelmed by too much information at once, so try to be general, short and precise. DO NOT give too much information to newcomers each round of interaction.
+# Since you are interacting with newcomers, they might be overwhelmed by too much information at once, so try to be general, short and precise. DO NOT give too much information to newcomers each round of interaction.
 
-# # """
+# """
 
 
 
