@@ -4,7 +4,7 @@ from streamlit_autorefresh import st_autorefresh
 
 # Optional: Protect this page
 # ✅ Protect this page
-if st.session_state["count"] < 6:
+if not st.session_state.get("ai_task") or not st.session_state.get("more"):
     st.warning("Please complete the main study before proceeding.")
     st.stop()
 

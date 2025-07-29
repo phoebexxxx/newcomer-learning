@@ -117,10 +117,10 @@ with left_col:
     #     st.session_state.sandbox_history = []
 
     # 🔁 Automatically rerun the app every 15 second
-    st_autorefresh(interval=15000, key="datarefresh")
+    # st_autorefresh(interval=15000, key="datarefresh")
     
-    content = st.session_state.get("sandbox", "").strip()
-    log_event("human", "taskw/AI", content)
+    # content = st.session_state.get("sandbox", "").strip()
+    # log_event("human", "taskw/AI", content)
 
     # Submit button
     if st.button("Submit Draft"):
@@ -190,6 +190,7 @@ st.markdown("""
 # Navigation
 if st.session_state.get("ai_task"):
     if st.session_state.count >= 6: 
+        st.session_state.more = True
         st.markdown(
         "<div style='text-align: center; color: #155724; background-color: #d4edda; padding: 1em; border-radius: 5px; border: 1px solid #c3e6cb;'>"
         "Please click the button below to continue."
