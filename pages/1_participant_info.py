@@ -2,7 +2,7 @@ import streamlit as st
 
 # protect page 
 if not st.session_state.get("welcome_done"): 
-    st.warning("Please read the welcome page before proceeding.")
+    st.warning("Please read the welcome page (home) before proceeding.")
     st.stop()
 
 

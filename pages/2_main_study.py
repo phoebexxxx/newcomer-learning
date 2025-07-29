@@ -77,7 +77,7 @@ with left_col:
 
     1. Please **DO NOT** open or read the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
     2. You should gather information from sources **outside of Wikipedia**.  
-    3. The wiki-helper AI assistant is waiting on the right, ready to support you. You must have at least **6 interactions** with the AI assistant during the task. *1 interaction = 1 question/request + 1 answer/response.*
+    3. The wiki-helper AI assistant is waiting on the right, ready to support you. You must have at least **6 interactions** with the AI assistant as you work on task. *1 interaction = 1 question/request + 1 answer/response.*
                 You can ask the AI assistant anything, for example, “Can you help me expand the article?” “Help me find a source!” “Evaluate my edit!” 
     4. The reference list is a simplified version. 
     5. Please write your edit in natural sentences, and provide links to your references if you could. 
@@ -178,7 +178,7 @@ with right_col:
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
 
-            st.rerun()
+            #st.rerun()
 
 st.markdown("""
             
