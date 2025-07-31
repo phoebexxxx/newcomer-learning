@@ -88,11 +88,12 @@ with left_col:
     ⏰ **Time limit:** 25 minutes
 
     1. Please **DO NOT** open or read the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
-    2. You should gather information from sources **outside of Wikipedia**.  
-    3. The wiki-helper AI assistant is waiting on the right, ready to support you. You must have at least **6 interactions** with the AI assistant as you work on task. *1 interaction = 1 question/request + 1 answer/response.*
+    2. Please **DO NOT** use AI writing assistant other than what we provide. Examples include ChatGPT, Claude, Gemini.
+    3. You should gather information from sources **outside of Wikipedia**.  
+    4. The wiki-helper AI assistant is waiting on the right, ready to support you. You must have at least **6 interactions** with the AI assistant as you work on task. *1 interaction = 1 question/request + 1 answer/response.*
                 You can ask the AI assistant anything, for example, “Can you help me expand the article?” “Help me find a source!” “Evaluate my edit!” 
-    4. The reference list is a simplified version. 
-    5. Please write your edit in natural sentences, and provide links to your references if you could. 
+    5. The reference list is a simplified version. 
+    6. Please write your edit in natural sentences, and provide links to your references if you could. 
 
     ---
     """)
@@ -115,10 +116,10 @@ with left_col:
 
     st.markdown("### 📝 Your Editing Sandbox")
     
-    st.session_state["sandbox"] = st.text_area(
+    st.text_area(
         label="Write your content or revision here:",
         height=300,
-        key="immediate"
+        key="sandbox"
     )
 
     # 🟡 Function to log the sandbox content every 15 seconds
@@ -135,7 +136,7 @@ with left_col:
 
     # Submit button
     if st.button("Submit Draft"):
-        task_content = st.session_state["sandbox"].strip()
+        task_content = st.session_state.get("sandbox", "").strip()
         st.session_state.ai_task = True
 
         if task_content:

@@ -30,10 +30,11 @@ You can add as many words, sentences, and references as you want.
 ⏰ **Time limit:** No time limit, recommend 30 minutes
 
 1. Please **DO NOT** open or read the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results. 
-2. You should gather information from sources **outside of Wikipedia**.
-3. We encourage you to **think aloud** as you write your edits.
-4. The reference list is a simplified version. 
-5. Please write your edit in natural sentences, and provide links to your references if you could. 
+2. Please **DO NOT** use AI writing assistant other than what we provide. Examples include ChatGPT, Claude, Gemini.
+3. You should gather information from sources **outside of Wikipedia**.
+4. We encourage you to **think aloud** as you write your edits.
+5. The reference list is a simplified version. 
+6. Please write your edit in natural sentences, and provide links to your references if you could. 
 
 ---
 """)
