@@ -3,9 +3,8 @@ import datetime
 from streamlit_autorefresh import st_autorefresh
 
 # Optional: Protect this page
-# ✅ Protect this page
-if not st.session_state.get("ai_task") or not st.session_state.get("more"):
-    st.warning("Please complete the main study before proceeding.")
+if not st.session_state.get("post_surveys_done"):
+    st.warning("Please complete the post surveys before proceeding.")
     st.stop()
 
 st.set_page_config(page_title="Follow Up", layout="centered")
@@ -57,8 +56,8 @@ st.session_state["follow_up"] = st.text_area(
     key="follow_up_text"
 )
 
-# 🔁 Automatically rerun the app every 1 second
-st_autorefresh(interval=15000, key="datarefresh")
+# 🔁 Automatically rerun the app every 30 seconds
+st_autorefresh(interval=30000, key="datarefresh")
 
 content = st.session_state.get("follow_up", "").strip()
 log_event("human", "taskw/oAI", content)
@@ -77,4 +76,4 @@ if st.button("Submit Follow-up Task"):
 # Show the "Next" button only if task was submitted
 if st.session_state.get("followup_done"):
     if st.button("Next"):
-        st.switch_page("pages/4_post_surveys.py")  
+        st.switch_page("pages/5_conclusion.py")  

@@ -21,7 +21,7 @@ GROUP_AGENT_MAP = {
 }
 
 system_prompt = GROUP_AGENT_MAP[group]
-print(system_prompt)
+# print(system_prompt)
 
 
 # this will be the different types of AI interactions
@@ -49,7 +49,6 @@ def log_event(AorH, component, content):
 
 # Initialize OpenAI client
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
 
 # Function to render messages
 def render_message(role, content):
@@ -214,7 +213,7 @@ if st.session_state.get("ai_task"):
         )
 
         if st.button("Next"):
-            st.switch_page("pages/3_follow_up.py")
+            st.switch_page("pages/3_post_surveys.py")
     else:
         st.markdown(
         "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"

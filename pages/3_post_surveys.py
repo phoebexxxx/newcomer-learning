@@ -1,8 +1,10 @@
 import streamlit as st
 
-if not st.session_state.get("followup_done"): 
-    st.warning("Please complete follow up task before proceeding.")
+# ✅ Protect this page
+if not st.session_state.get("ai_task") or not st.session_state.get("more"):
+    st.warning("Please complete the main study before proceeding.")
     st.stop()
+
 
 st.set_page_config(page_title="Post Task Surveys", layout="wide")
 st.title("🧠 Post-Task Surveys")
@@ -32,4 +34,4 @@ st.components.v1.iframe(src=survey_2_url, height=500, width=450, scrolling=True)
 
 if st.button("Next"):
     st.session_state.post_surveys_done = True  # ✅ set the flag
-    st.switch_page("pages/5_conclusion.py")  
+    st.switch_page("pages/4_follow_up.py")  

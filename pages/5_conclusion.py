@@ -2,8 +2,9 @@ import streamlit as st
 import pandas as pd 
 import io
 
-if not st.session_state.get("post_surveys_done"):
-    st.warning("Please complete the post surveys before you conclude.")
+
+if not st.session_state.get("followup_done"): 
+    st.warning("Please complete follow up task before you conclude.")
     st.stop()
 
 
