@@ -22,11 +22,9 @@ You should receive your participant ID and group information from the researcher
 
 # Input fields
 st.session_state.participant_id = st.text_input("Enter your Participant ID:", st.session_state.participant_id)
-st.session_state.group = st.selectbox("Select your Group:", ["", "Group A", "Group B", "Group C", "Group D"])
+st.session_state.group = st.selectbox("Select your Group:", ["", "Group A", "Group B"])
 # Group A: scaffolding + RAG 
-# Group B: scaffolding + no RAG 
-# Group C: no scaffolding + RAG 
-# Group D: no scaffolding + no RAG
+# Group B: no scaffolding + RAG 
 
 # Navigation
 if st.session_state.participant_id and st.session_state.group:

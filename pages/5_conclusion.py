@@ -39,7 +39,7 @@ else:
 
 st.markdown("""
             
-🎉 You are all done! Thank you so much for participating in this study. We truly value your participation. 
+🎉 You are all done! Thank you so much for participating in this study. Again, we truly value your participation. 
             
 """)
 

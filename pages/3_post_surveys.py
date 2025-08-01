@@ -11,7 +11,7 @@ st.set_page_config(page_title="Post Task Surveys", layout="wide")
 st.title("🧠 Post-Task Surveys")
 
 st.markdown("""
-We now ask you to complete **the following survey** about your experience.
+We now ask you to complete **the following survey** about your experience during the task.
 """)
 
 # Replace with your real Qualtrics survey URLs

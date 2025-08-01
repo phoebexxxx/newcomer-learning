@@ -23,17 +23,15 @@ def log_event(AorH, component, content):
 st.markdown("""
 ### ✍️ Task Description
 
-Improve the article about Dutch soccer player ***Manon Melis*** on Wikipedia.  
+Now, please improve the article about Dutch soccer player ***Manon Melis*** on Wikipedia. 
 You can add as many words, sentences, and references as you want. 
             
 ⏰ **Time limit:** No time limit, recommend 30 minutes
-
-1. Please **DO NOT** open or read the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results. 
-2. Please **DO NOT** use AI writing assistant other than what we provide. Examples include ChatGPT, Claude, Gemini.
-3. You should gather information from sources **outside of Wikipedia**.
-4. We encourage you to **think aloud** as you write your edits.
-5. The reference list is a simplified version. 
-6. Please write your edit in natural sentences, and provide links to your references if you could. 
+            
+1. Please use search engines (eg. Google) for sources <u>**outside of Wikipedia**</u>, but <u>**DO NOT open or read**</u> the current Wikipedia article named *Manon Melis*, even if you see it in search results.  
+2. Please <u>**DO NOT** use AI writing assistant</u> for this task, as we do not AI assistant for this task. Examples include ChatGPT, Claude, Gemini. If you have AI answers enabled, try <u>**NOT** look at </u> them.
+3. Please write your edit in natural sentences, and <u>provide links to your sources/references</u> if you could. 
+4. We encourage you to <u>**think aloud**</u> as you write your edits.
 
 ---
 """)
@@ -82,6 +80,25 @@ else:
 
 
 if st.session_state.get("followup_done"):
+    st.markdown("""
+    ---
+    """)
+        
+    st.markdown("""Please fill out the following short assessment. Each one of them may have <u>one or more</u> correct answer. It tasks around 5 minutes. After you are done with the assessment, please click "Next" to conclude the study.
+    """)
+    survey_1_url = "https://umn.qualtrics.com/jfe/form/SV_51oE0yq20SQ0njg "
+    st.markdown("### 📋 Survey 1: Wikipedia knowledge")
+    st.markdown(
+    f"""
+    <div style="display: flex; justify-content: center;">
+        <iframe src="{survey_1_url}" width="450" height="700" scrolling="yes" style="border: none;"></iframe>
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
+    st.markdown("""
+    ---
+    """)
     if st.button("Next"):
         st.switch_page("pages/5_conclusion.py")  
 

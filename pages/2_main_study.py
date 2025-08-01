@@ -2,7 +2,7 @@ import streamlit as st
 import openai
 import datetime
 from streamlit_autorefresh import st_autorefresh
-from agents import agent_a, agent_d
+from agents import agent_a, agent_b
 
 # Optional: Protect this page
 if not st.session_state.get("participant_id") or not st.session_state.get("group"):
@@ -17,7 +17,7 @@ st.title("Wikipedia Editing Task")
 group = st.session_state.get("group")
 GROUP_AGENT_MAP = {
     "Group A": agent_a.system_prompt(),
-    "Group D": agent_d.system_prompt()
+    "Group B": agent_b.system_prompt()
 }
 
 system_prompt = GROUP_AGENT_MAP[group]
@@ -80,23 +80,21 @@ with left_col:
     st.subheader("✍️ Task Description")
 
     st.markdown("""
-    The article ***Bronwyn Oliver*** on Wikipedia is currently a stub, meaning it is short and needs improvement, so that readers can learn more about her.
+    The article about a Australian sculptor ***Bronwyn Oliver*** on Wikipedia is currently a stub, which means it is short and needs improvement, so people who read Wikipedia can learn more about her.
 
     **Your task:**  
-    Expand this article by adding ***150–200 words*** and including ***at least 3 references*** to support the information you add.  
+    Expand this article by adding ***around 100 words*** and including ***at least 3 references*** to support the information you add. Keep in mind this is for Wikipedia, not a personal or class writing assignment.
     
     ⏰ **Time limit:** 25 minutes
 
-    1. Please **DO NOT** open or read the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
-    2. Please **DO NOT** use AI writing assistant other than what we provide. Examples include ChatGPT, Claude, Gemini.
-    3. You should gather information from sources **outside of Wikipedia**.  
-    4. The wiki-helper AI assistant is waiting on the right, ready to support you. You must have at least **6 interactions** with the AI assistant as you work on task. *1 interaction = 1 question/request + 1 answer/response.*
-                You can ask the AI assistant anything, for example, “Can you help me expand the article?” “Help me find a source!” “Evaluate my edit!” 
-    5. The reference list is a simplified version. 
-    6. Please write your edit in natural sentences, and provide links to your references if you could. 
+    1. Please use search engines (eg. Google) for sources <u>**outside of Wikipedia**</u>, but <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
+    2. Please <u>**DO NOT** use AI writing assistant</u> other than what we provide. Examples include ChatGPT, Claude, Gemini. If you have AI answers enabled, try <u>**NOT** look at </u> them.
+    3. The wiki-helper AI assistant is on the right. You must have at least <u>**6 interactions**</u> with the AI assistant as you work on task. <u>*1 interaction = 1 question/request + 1 answer/response.*</u>
+                You can ask the AI assistant anything, for example, “*Can you help me expand the article?*” “*Help me find a source!*” “*Evaluate my edit!*” 
+    4. Please write your edit in natural sentences, and <u>provide links to your sources/references</u> if you could. 
 
     ---
-    """)
+    """, unsafe_allow_html=True)
 
     st.markdown("### 🧾 Current Article Content")
     st.markdown("""
@@ -120,8 +118,8 @@ if "count" not in st.session_state:
 # Right column: AI interaction
 with right_col:
 
-    st.subheader("🤖 Chat with Wiki-helper AI.")
-    st.write("Ask questions or requests about editing Wikipedia! If the assistant didn't respond, it is likely because it didn't hear. Simply send your question or request again! It may take some time for the assistant to think.")
+    st.subheader("🤖 Chat with Wiki-helper, the AI assistant.")
+    st.write("Ask questions or requests about editing Wikipedia! If the assistant didn't respond, it is likely because it didn't hear. Simply send your question or request again. It may take some time for the assistant to think.")
 
     for message in st.session_state.messages[1:]:  # Skip system message
         render_message(message["role"], message["content"])
