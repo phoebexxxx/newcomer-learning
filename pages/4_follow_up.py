@@ -49,31 +49,58 @@ Melis has played for the Netherlands national team since 2005. She played for th
 ---
 """, unsafe_allow_html=True)
 
-# User writing area
-st.session_state["follow_up"] = st.text_area(
-    label="✏️ Write your content below:",
-    height=300,
-    key="follow_up_text"
+# original sandbox
+# # User writing area
+# st.session_state["follow_up"] = st.text_area(
+#     label="✏️ Write your content below:",
+#     height=300,
+#     key="follow_up_text"
+# )
+
+# # 🔁 Automatically rerun the app every 30 seconds
+# st_autorefresh(interval=30000, key="datarefresh")
+
+# content = st.session_state.get("follow_up", "").strip()
+# log_event("human", "taskw/oAI", content)
+
+st.markdown("### 📝 Your Editing Sandbox")
+
+st.markdown(
+f"""
+<iframe src="https://docs.google.com/document/d/1cDFC31jIWiNWG6xYN9WX5xX_hZDOCw6LlXzvJnLWVNk/edit?usp=sharing?embedded=true"
+        width="100%" height="700" frameborder="0">
+</iframe>
+""",
+unsafe_allow_html=True
 )
 
-# 🔁 Automatically rerun the app every 30 seconds
-st_autorefresh(interval=30000, key="datarefresh")
+if st.button("Submit"):
+    st.success("Your contribution has been saved.")
+    st.session_state.followup_done = True
+else: 
+    st.warning("Please submit your draft.")
 
-content = st.session_state.get("follow_up", "").strip()
-log_event("human", "taskw/oAI", content)
 
-# When user submits the task
-if st.button("Submit Follow-up Task"):
-    if content:
-        # timestamp = datetime.datetime.now().isoformat()
-        # st.session_state.logs.append((timestamp, "follow_up_task", response.strip()))
-        log_event("human", "taskw/oAI", content)
-        st.success("Your contribution has been saved.")
-        st.session_state.followup_done = True
-    else:
-        st.warning("Please write something before submitting.")
-
-# Show the "Next" button only if task was submitted
 if st.session_state.get("followup_done"):
     if st.button("Next"):
         st.switch_page("pages/5_conclusion.py")  
+
+
+
+
+# original 
+# # When user submits the task
+# if st.button("Submit"):
+#     if content:
+#         # timestamp = datetime.datetime.now().isoformat()
+#         # st.session_state.logs.append((timestamp, "follow_up_task", response.strip()))
+#         log_event("human", "taskw/oAI", content)
+#         st.success("Your contribution has been saved.")
+#         st.session_state.followup_done = True
+#     else:
+#         st.warning("Please write something before submitting.")
+
+# # Show the "Next" button only if task was submitted
+# if st.session_state.get("followup_done"):
+#     if st.button("Next"):
+#         st.switch_page("pages/5_conclusion.py")  

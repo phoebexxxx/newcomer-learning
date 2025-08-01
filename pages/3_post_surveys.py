@@ -1,7 +1,8 @@
 import streamlit as st
 
+
 # ✅ Protect this page
-if not st.session_state.get("ai_task") or not st.session_state.get("more"):
+if not st.session_state.get("more"):
     st.warning("Please complete the main study before proceeding.")
     st.stop()
 
@@ -10,7 +11,7 @@ st.set_page_config(page_title="Post Task Surveys", layout="wide")
 st.title("🧠 Post-Task Surveys")
 
 st.markdown("""
-We now ask you to complete **three short surveys** about your experience.
+We now ask you to complete **the following survey** about your experience.
 """)
 
 # Replace with your real Qualtrics survey URLs

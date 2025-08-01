@@ -50,6 +50,7 @@ def log_event(AorH, component, content):
 # Initialize OpenAI client
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
+
 # Function to render messages
 def render_message(role, content):
     if role == "user":
@@ -109,42 +110,8 @@ with left_col:
     [2] Art Gallery of New South Wales Contemporary Collection Handbook
     </div>
     
-    ---
     """, unsafe_allow_html=True)
 
-
-    st.markdown("### 📝 Your Editing Sandbox")
-    
-    st.text_area(
-        label="Write your content or revision here:",
-        height=300,
-        key="sandbox"
-    )
-
-    # 🟡 Function to log the sandbox content every 15 seconds
-    # if "auto_log_time" not in st.session_state:
-    #     st.session_state.auto_log_time = time.time()
-    # if "sandbox_history" not in st.session_state:
-    #     st.session_state.sandbox_history = []
-
-    # 🔁 Automatically rerun the app every 15 second
-    # st_autorefresh(interval=15000, key="datarefresh")
-    
-    # content = st.session_state.get("sandbox", "").strip()
-    # log_event("human", "taskw/AI", content)
-
-    # Submit button
-    if st.button("Submit Draft"):
-        task_content = st.session_state.get("sandbox", "").strip()
-        st.session_state.ai_task = True
-
-        if task_content:
-            # timestamp = datetime.datetime.now().isoformat()
-            log_event("human", "taskw/AI", task_content)
-            # st.session_state.logs.append((timestamp, "task", task_content))
-            st.success("✅ Your draft has been submitted and added to logs.")
-        else:
-            st.warning("❌ Please write something before submitting.")
 
 # initialize counter to ensure at least 6 interactions
 if "count" not in st.session_state:
@@ -196,24 +163,33 @@ with right_col:
 
             st.rerun()
 
+
 st.markdown("""
             
 ---
 """)
 
-# Navigation
-if st.session_state.get("ai_task"):
-    if st.session_state.count >= 6: 
-        st.session_state.more = True
-        st.markdown(
-        "<div style='text-align: center; color: #155724; background-color: #d4edda; padding: 1em; border-radius: 5px; border: 1px solid #c3e6cb;'>"
-        "Please click the button below to continue."
-        "</div>",
-        unsafe_allow_html=True
-        )
 
-        if st.button("Next"):
-            st.switch_page("pages/3_post_surveys.py")
+st.markdown("### 📝 Your Editing Sandbox")
+
+# try google docs
+
+st.markdown(
+f"""
+<iframe src="https://docs.google.com/document/d/146kWDpmQkMoZiqRqSO5XrRx1F5jONMKwvE-7j6s9PNw/edit?usp=sharing?embedded=true"
+        width="100%" height="700" frameborder="0">
+</iframe>
+""",
+unsafe_allow_html=True
+)
+
+st.session_state.move_on = False
+
+
+# now submit button is our navigation
+if st.button("Submit Draft"):
+    if st.session_state.count >= 6: 
+        st.switch_page("pages/3_post_surveys.py")  
     else:
         st.markdown(
         "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
@@ -229,8 +205,55 @@ else:
     "</div>",
     unsafe_allow_html=True
     )
+        
 
         
+
+
+
+
+
+
+    
+    # original sandbox
+    # st.text_area(
+    #     label="Write your content or revision here:",
+    #     height=300,
+    #     key="sandbox"
+    # )
+
+
+# # Navigation
+# if st.session_state.get("ai_task"):
+#     if st.session_state.count >= 6: 
+#         st.session_state.more = True
+#         st.markdown(
+#         "<div style='text-align: center; color: #155724; background-color: #d4edda; padding: 1em; border-radius: 5px; border: 1px solid #c3e6cb;'>"
+#         "Please click the button below to continue."
+#         "</div>",
+#         unsafe_allow_html=True
+#         )
+
+#         if st.button("Next"):
+#             st.switch_page("pages/3_post_surveys.py")
+#     else:
+#         st.markdown(
+#         "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
+#         f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.'''
+#         "</div>",
+#         unsafe_allow_html=True
+#         )
+#         # st.warning(f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.''')
+# else:
+#     st.markdown(
+#     "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
+#     "Please submit your finished draft."
+#     "</div>",
+#     unsafe_allow_html=True
+#     )
+
+
+
 
 # Optional: Export logs
 # with st.expander("📁 Export Logs"):
