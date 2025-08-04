@@ -3,6 +3,11 @@ import openai
 import datetime
 from streamlit_autorefresh import st_autorefresh
 from agents import agent_a, agent_b
+import faiss
+import json
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
 
 # Optional: Protect this page
 if not st.session_state.get("participant_id") or not st.session_state.get("group"):
@@ -24,12 +29,48 @@ system_prompt = GROUP_AGENT_MAP[group]
 # print(system_prompt)
 
 
+
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+
+# load both text & embeddings
+index = faiss.read_index("rag/faiss.index")
+with open("rag/text_chunks.json", "r") as f:
+    text_chunks = json.load(f)
+
+# Define the search function
+def semantic_search(query: str, top_k: int=3):
+    query_embedding = model.encode([query], convert_to_numpy=True)
+    distances, indices = index.search(query_embedding, top_k)
+    results = [(text_chunks[i], distances[0][j]) for j, i in enumerate(indices[0])]
+    return results
+
+
+# rewrite question
+def rewrite_question(raw_question):
+    revision_prompt = [
+        {"role": "system", "content": "You are helping revise vague questions about Wikipedia editing into more specific, policy-relevant questions, within one paragraph."},
+        {"role": "user", "content": f"The user asked: '{raw_question}'. Please rewrite it to be clearer and more policy-focused."}
+    ]
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=revision_prompt,
+        )
+        result = response.choices[0].message.content.strip()
+        log_event("AI", "revise_question", result)
+        print(result)
+        return result
+    except Exception as e:
+        return raw_question  # fallback
+
+
 # this will be the different types of AI interactions
 if "messages" not in st.session_state:
     st.session_state.messages = [{
         "role": "system",
         "content": system_prompt 
     }]
+rag_prompt = st.session_state.messages.copy()
 
 # initialize logs 
 if "logs" not in st.session_state:
@@ -143,9 +184,20 @@ with right_col:
 
             with st.spinner("Wiki-helper AI is thinking..."):
                 try:
+                    # step 1: rewrite the user's question
+                    rewritten = rewrite_question(user_input)
+
+                    # step 2: retrieve most relevant policy chunks
+                    retrieved = semantic_search(rewritten, top_k=3)
+                    context = "\n\n".join([f"[{doc['source']}]: {doc['text']}" for doc, _ in retrieved])
+
+                    # step 3: construct a RAG message
+                    rag_prompt.append({"role": "system", "content": f"[INTERNAL ONLY] Revised user query: {rewritten}"})
+                    rag_prompt.append({"role": "system", "content": f"[INTERNAL ONLY] Retrieved Wikipedia policy context:\n{context}"})
+
                     response = client.chat.completions.create(
                         model="gpt-4o-mini",
-                        messages=st.session_state.messages,
+                        messages=rag_prompt,
                     
                     )
                     assistant_reply = response.choices[0].message.content
@@ -187,6 +239,7 @@ st.session_state.move_on = False
 # now submit button is our navigation
 if st.button("Submit Draft"):
     if st.session_state.count >= 6: 
+        st.session_state.move_on = True
         st.switch_page("pages/3_post_surveys.py")  
     else:
         st.markdown(
