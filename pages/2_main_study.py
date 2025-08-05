@@ -48,7 +48,7 @@ def semantic_search(query: str, top_k: int=3):
 # rewrite question
 def rewrite_question(raw_question):
     revision_prompt = [
-        {"role": "system", "content": "You are helping revise vague questions about Wikipedia editing into more specific, policy-relevant questions, within one paragraph."},
+        {"role": "system", "content": "You are helping revise vague questions about Wikipedia editing into more specific, policy-relevant questions, within three sentences."},
         {"role": "user", "content": f"The user asked: '{raw_question}'. Please rewrite it to be clearer and more policy-focused."}
     ]
     try:
@@ -93,6 +93,7 @@ def log_event(AorH, component, content):
 # Initialize OpenAI client
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
+
 # Function to render messages
 def render_message(role, content):
     if role == "user":
@@ -125,15 +126,15 @@ with left_col:
     The article about a Australian sculptor ***Bronwyn Oliver*** on Wikipedia is currently a stub, which means it is short and needs improvement, so people who read Wikipedia can learn more about her.
 
     **Your task:**  
-    Expand this article by adding ***around 100 words*** and including ***at least 3 references*** to support the information you add. Keep in mind this is for Wikipedia, not a personal or class writing assignment.
+    Expand this article by adding ***around 100 words*** and including ***at least 2 references*** to support the information you add. <u>Keep in mind this is for Wikipedia, not a personal or class writing assignment.</u>
     
-    ⏰ **Time limit:** 25 minutes
+    ⏰ **Time limit:** 25 minutes in total
 
-    1. Please use search engines (eg. Google) for sources <u>**outside of Wikipedia**</u>, but <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
-    2. Please <u>**DO NOT** use AI writing assistant</u> other than what we provide. Examples include ChatGPT, Claude, Gemini. If you have AI answers enabled, try <u>**NOT** look at </u> them.
-    3. The wiki-helper AI assistant is on the right. You must have at least <u>**6 interactions**</u> with the AI assistant as you work on task. <u>*1 interaction = 1 question/request + 1 answer/response.*</u>
-                You can ask the AI assistant anything, for example, “*Can you help me expand the article?*” “*Help me find a source!*” “*Evaluate my edit!*” 
-    4. Please write your edit in natural sentences, and <u>provide links to your sources/references</u> if you could. 
+    1. BEFORE you start writing, please <u>**use the first 5 minutes**</u> to interact with the wiki-helper AI assistant on the right. You can ask the AI assistant anything at different stages of your edits, for example, “*Can you help me expand the article?*” “*Help me find a source!*” “*Evaluate my edit!*” 
+                In total, You must have at least <u>**6 interactions**</u> with the AI assistant as you work on task. <u>*1 interaction = 1 question/request + 1 answer/response.*</u>
+    3. Please use search engines (eg. Google) for sources <u>**outside of Wikipedia**</u>, but <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
+    4. Please <u>**DO NOT** use AI writing assistant</u> other than what we provide. Examples include ChatGPT, Claude, Gemini. If you have AI answers enabled, try <u>**NOT** look at </u> them.
+    5. Please write your edit in natural sentences, and <u>provide links to your sources/references</u> if you could. 
 
     ---
     """, unsafe_allow_html=True)

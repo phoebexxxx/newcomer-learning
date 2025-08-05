@@ -16,7 +16,7 @@ if "group" not in st.session_state:
     st.session_state.group = ""
 
 st.markdown("""
-You should receive your participant ID and group information from the researcher.
+You should receive your participant ID and group information from the researcher. If not, please ask the researcher now.
 """)
 
 

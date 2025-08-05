@@ -12,7 +12,7 @@ This 60-90 minute study includes the following steps:
 2. Complete a Wikipedia article editing task
 3. Fill out a survey
 4. Complete a follow up task
-5. Participate in an short interview (if selected)
+5. Participate in a short interview (if selected)
             
 Before you start, it is important to note: 
             

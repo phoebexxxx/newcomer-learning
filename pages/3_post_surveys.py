@@ -2,8 +2,7 @@ import streamlit as st
 
 
 # ✅ Protect this page
-if False:
-#if not st.session_state.move_on:
+if not st.session_state.move_on:
     st.warning("Please complete the main study before proceeding.")
     st.stop()
 
@@ -18,7 +17,7 @@ We now ask you to complete **the following survey** about your experience during
 # Replace with your real Qualtrics survey URLs
 survey_1_url = "https://umn.qualtrics.com/jfe/form/SV_abLhIe967mu37Qa"
 
-st.markdown("### 📋 Survey 1: User Experience Survey")
+st.markdown("### 📋 Survey: User Experience Survey")
 st.components.v1.iframe(src=survey_1_url, height=500, width=800, scrolling=True)
 
 # # Layout: two columns side by side
