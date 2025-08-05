@@ -93,7 +93,6 @@ def log_event(AorH, component, content):
 # Initialize OpenAI client
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-
 # Function to render messages
 def render_message(role, content):
     if role == "user":
