@@ -57,7 +57,6 @@ def rewrite_question(raw_question):
             messages=revision_prompt,
         )
         result = response.choices[0].message.content.strip()
-        log_event("AI", "revise_question", result)
         print(result)
         return result
     except Exception as e:
@@ -70,7 +69,10 @@ if "messages" not in st.session_state:
         "role": "system",
         "content": system_prompt 
     }]
-rag_prompt = st.session_state.messages.copy()
+rag_prompt = [{
+        "role": "system",
+        "content": system_prompt 
+    }]
 
 # initialize logs 
 if "logs" not in st.session_state:
@@ -186,14 +188,19 @@ with right_col:
                 try:
                     # step 1: rewrite the user's question
                     rewritten = rewrite_question(user_input)
+                    log_event("AI", "revise_questions", rewritten)
 
                     # step 2: retrieve most relevant policy chunks
                     retrieved = semantic_search(rewritten, top_k=3)
                     context = "\n\n".join([f"[{doc['source']}]: {doc['text']}" for doc, _ in retrieved])
+                    log_event("AI", "policies", retrieved)
 
                     # step 3: construct a RAG message
-                    rag_prompt.append({"role": "system", "content": f"[INTERNAL ONLY] Revised user query: {rewritten}"})
-                    rag_prompt.append({"role": "system", "content": f"[INTERNAL ONLY] Retrieved Wikipedia policy context:\n{context}"})
+                    # rag_prompt.append({"role": "system", "content": f"[INTERNAL ONLY] Revised user query: {rewritten}"})
+                    # rewritten question is ONLY used for RAG
+                    rag_prompt.append({"role": "system", "content": f"[INTERNAL ONLY] Retrieved Wikipedia policy context:\n{context}. Please summarize these policies and include relevant links."})
+                    rag_prompt.append(({"role": "user", "content": user_input}))
+                    print(rag_prompt)
 
                     response = client.chat.completions.create(
                         model="gpt-4o-mini",
@@ -202,6 +209,7 @@ with right_col:
                     )
                     assistant_reply = response.choices[0].message.content
                     st.session_state.messages.append({"role": "assistant", "content": assistant_reply})
+                    rag_prompt.append({"role": "assistant", "content": assistant_reply})
                     log_event("AI", "interactw/AI", assistant_reply)
                     st.session_state.count = st.session_state.count + 1      # enforce users to have at least 6 interactions (interaction = input + response)
                     # st.session_state.logs.append(
