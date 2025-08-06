@@ -132,17 +132,19 @@ with left_col:
 
     ⏰ You’ll have ***about 30 minutes*** total.   
           
-    🚫 DON’Ts
+    **🚫 DON’Ts**
     - <u>**DO NOT** use AI writing assistant</u> other than what we provide. Examples include ChatGPT, Claude, Gemini. <u>**DO NOT** look at </u> AI generated answers in search engines.
     - <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
 
-    ✅ DOs
+    **✅ DOs**
     - Spend <u>**the first 5–10 minutes**</u> asking questions, exploring ideas, and planning your Wikipedia edit with the wiki-helper AI assistant on the right.
     - Have ***at least 6 total interactions*** with the assistant **throughout the task**. (<u>*1 interaction = a question/request + the assistant’s response.*</u>)    
     - Feel free to keep using the AI assistant throughout the task, eg. get feedback on your edit, ask about policies, or help you find sources.
     - Write your edit in natural sentences, and <u>provide links for sources <u>**outside of Wikipedia**</u> to your sources/references</u> if you could.    
     - Submit whatever you have -- it's ok if your edit is not finished. We are interested in the process. 
-                
+
+    **NOTE**: The AI assistant DOES NOT have access to the Google doc (your edit space).            
+    
     ---
     """, unsafe_allow_html=True)
 
