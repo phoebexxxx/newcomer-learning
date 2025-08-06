@@ -1,6 +1,7 @@
 import streamlit as st
 import datetime
 from streamlit_autorefresh import st_autorefresh
+from sandbox import follow_sand
 
 # Optional: Protect this page
 if not st.session_state.get("post_surveys_done"):
@@ -19,6 +20,10 @@ def log_event(AorH, component, content):
         "timestamp": datetime.datetime.now().isoformat(),
         "content": content
     })
+
+
+p_id = st.session_state.get("participant_id")
+FOLLOW_SAND = follow_sand.follow_sand(int(p_id)-1)
 
 st.markdown("""
 ### ✍️ Task Description
@@ -64,12 +69,12 @@ Melis has played for the Netherlands national team since 2005. She played for th
 st.markdown("### 📝 Your Editing Sandbox")
 
 st.markdown(
-f"""
-<iframe src="https://docs.google.com/document/d/1cDFC31jIWiNWG6xYN9WX5xX_hZDOCw6LlXzvJnLWVNk/edit?usp=sharing?embedded=true"
-        width="100%" height="700" frameborder="0">
-</iframe>
-""",
-unsafe_allow_html=True
+    f"""
+    <iframe src="{FOLLOW_SAND}?embedded=true"
+            width="100%" height="700" frameborder="0">
+    </iframe>
+    """,
+    unsafe_allow_html=True
 )
 
 if st.button("Submit"):

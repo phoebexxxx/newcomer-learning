@@ -7,6 +7,7 @@ import faiss
 import json
 import numpy as np
 from sentence_transformers import SentenceTransformer
+from sandbox import main_sand
 
 
 # Optional: Protect this page
@@ -28,7 +29,8 @@ GROUP_AGENT_MAP = {
 system_prompt = GROUP_AGENT_MAP[group]
 # print(system_prompt)
 
-
+p_id = st.session_state.get("participant_id")
+MAIN_SAND = main_sand.main_sand(int(p_id)-1)
 
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
@@ -123,19 +125,24 @@ with left_col:
     st.subheader("✍️ Task Description")
 
     st.markdown("""
-    The article about a Australian sculptor ***Bronwyn Oliver*** on Wikipedia is currently a stub, which means it is short and needs improvement, so people who read Wikipedia can learn more about her.
-
-    **Your task:**  
-    Expand this article by adding ***around 100 words*** and including ***at least 2 references*** to support the information you add. <u>Keep in mind this is for Wikipedia, not a personal or class writing assignment.</u>
+    You're invited to help improve a short Wikipedia article about an Australian sculptor ***Bronwyn Oliver***, to make it more informative for readers.
     
-    ⏰ **Time limit:** 25 minutes in total
+    **Your task:**  
+    Practice improving this Wikipedia article by expanding it. Try adding ***about 100 words*** and ***at least 2 references***. This is not a personal writing assignment — the goal is <u>to practice making a Wikipedia-style contribution</u>.
 
-    1. BEFORE you start writing, please <u>**use the first 5 minutes**</u> to interact with the wiki-helper AI assistant on the right. You can ask the AI assistant anything at different stages of your edits, for example, “*Can you help me expand the article?*” “*Help me find a source!*” “*Evaluate my edit!*” 
-                In total, You must have at least <u>**6 interactions**</u> with the AI assistant as you work on task. <u>*1 interaction = 1 question/request + 1 answer/response.*</u>
-    3. Please use search engines (eg. Google) for sources <u>**outside of Wikipedia**</u>, but <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
-    4. Please <u>**DO NOT** use AI writing assistant</u> other than what we provide. Examples include ChatGPT, Claude, Gemini. If you have AI answers enabled, try <u>**NOT** look at </u> them.
-    5. Please write your edit in natural sentences, and <u>provide links to your sources/references</u> if you could. 
+    ⏰ You’ll have ***about 30 minutes*** total.   
+          
+    🚫 DON’Ts
+    - <u>**DO NOT** use AI writing assistant</u> other than what we provide. Examples include ChatGPT, Claude, Gemini. <u>**DO NOT** look at </u> AI generated answers in search engines.
+    - <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
 
+    ✅ DOs
+    - Spend <u>**the first 5–10 minutes**</u> asking questions, exploring ideas, and planning your Wikipedia edit with the wiki-helper AI assistant on the right.
+    - Have ***at least 6 total interactions*** with the assistant **throughout the task**. (<u>*1 interaction = a question/request + the assistant’s response.*</u>)    
+    - Feel free to keep using the AI assistant throughout the task, eg. get feedback on your edit, ask about policies, or help you find sources.
+    - Write your edit in natural sentences, and <u>provide links for sources <u>**outside of Wikipedia**</u> to your sources/references</u> if you could.    
+    - Submit whatever you have -- it's ok if your edit is not finished. We are interested in the process. 
+                
     ---
     """, unsafe_allow_html=True)
 
@@ -233,12 +240,12 @@ st.markdown("### 📝 Your Editing Sandbox")
 # try google docs
 
 st.markdown(
-f"""
-<iframe src="https://docs.google.com/document/d/146kWDpmQkMoZiqRqSO5XrRx1F5jONMKwvE-7j6s9PNw/edit?usp=sharing?embedded=true"
-        width="100%" height="700" frameborder="0">
-</iframe>
-""",
-unsafe_allow_html=True
+    f"""
+    <iframe src="{MAIN_SAND}?embedded=true"
+            width="100%" height="700" frameborder="0">
+    </iframe>
+    """,
+    unsafe_allow_html=True
 )
 
 st.session_state.move_on = False
