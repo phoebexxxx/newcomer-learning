@@ -123,25 +123,27 @@ left_col, right_col = st.columns([1.25, 1.25])
 
 # Left column: user editing sandbox
 with left_col:
-    st.subheader("✍️ Task Description")
+    st.subheader("✍️ Your task: Contribute to Wikipedia as a new editor")
 
     st.markdown("""
-    You're invited to help improve a short Wikipedia article about an Australian sculptor ***Bronwyn Oliver***, to make it more informative for readers.
-    
+    You will be working on a short Wikipedia article about the Australian sculptor ***Bronwyn Oliver***. Your job is to help improve this article by expanding it with content that fits Wikipedia. 
+                
     **Your task:**  
-    Practice improving this Wikipedia article by expanding it. Try adding ***about 100 words*** and ***at least 2 references***. This is not a personal writing assignment — the goal is <u>to practice making a Wikipedia-style contribution</u>.
+    - Use **WikiCoach**, an AI assistant on the right, to help you think and edit the task. You can ask questions, explore ideas, or get feedback as you go. 
+    - Add ***about 100 words*** and ***at least 2 references***. 
+    This is not a personal writing assignment — the goal is <u>to practice making a Wikipedia-style contribution</u>.
 
     ⏰ You’ll have ***about 30 minutes*** total.   
           
     **🚫 DON’Ts**
-    - <u>**DO NOT** use AI writing assistant</u> other than what we provide. Examples include ChatGPT, Claude, Gemini. <u>**DO NOT** look at </u> AI generated answers in search engines.
-    - <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
+    - <u>**DO NOT** use other AI tools </u> like ChatGPT, Claude, Gemini. <u>**DO NOT** look at </u> AI generated summaries.
+    - <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*.  
 
     **✅ DOs**
-    - Spend <u>**the first 5–10 minutes**</u> asking questions, exploring ideas, and planning your Wikipedia edit with the WikiCoach, the AI assistant on the right.
+    - Spend <u>**the first 5–10 minutes**</u> talking with **WikiCoach**, the AI assistant on the right.
     - Have ***at least 6 total interactions*** with the assistant **throughout the task**. (<u>*1 interaction = a question/request + the assistant’s response.*</u>)    
-    - Feel free to keep using the AI assistant throughout the task, eg. get feedback on your edit, ask about policies, or help you find sources.
-    - Write your edit in natural sentences, and provide links for <u>**sources outside of Wikipedia**</u> if you could.    
+    - Feel free to keep using **WikiCoach** throughout this task.
+    - You are allowed to search for <u>**sources outside of Wikipedia**</u> on your own, and include links for sources if you could.    
     - Submit whatever you have -- it's ok if your edit is not finished. We are interested in the process. 
 
     **NOTE**: The AI assistant DOES NOT have access to the Google doc (your edit space).            

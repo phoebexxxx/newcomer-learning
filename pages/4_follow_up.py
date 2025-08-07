@@ -28,15 +28,18 @@ FOLLOW_SAND = follow_sand.follow_sand(int(p_id)-1)
 st.markdown("""
 ### ✍️ Task Description
 
-Now, please improve the article about a Dutch soccer player ***Manon Melis*** on Wikipedia. 
+Now, please improve the article about a Dutch soccer player ***Manon Melis*** on Wikipedia. Your job is to add well-sourced content that fits Wikipedi's standards. 
 You can add as many words, sentences, and references as you want. 
             
 ⏰ **Time limit:** No time limit, recommended 30 minutes
             
-1. Please use search engines (eg. Google) for sources <u>**outside of Wikipedia**</u>, but <u>**DO NOT open or read**</u> the current Wikipedia article named *Manon Melis*, even if you see it in search results.  
-2. Please <u>**DO NOT** use AI writing assistant</u> for this task, as we do not AI assistant for this task. Examples include ChatGPT, Claude, Gemini. If you have AI answers enabled, try <u>**NOT** look at </u> them.
-3. Please write your edit in natural sentences, and <u>provide links to your sources/references</u> if you could. 
-4. We encourage you to <u>**think aloud**</u> as you write your edits.
+**🚫 DON’Ts**
+- <u>**DO NOT** use other AI tools </u> like ChatGPT, Claude, Gemini. <u>**DO NOT** look at </u> AI generated summaries.
+- <u>**DO NOT open or read**</u> the current Wikipedia article named ***Manon Melis***.  
+
+**✅ DOs**
+- You can search for <u>**sources outside of Wikipedia**</u>, and include links for sources if you could.    
+- We encourage you to <u>**think aloud**</u> as you write your edits.
 
 ---
 """, unsafe_allow_html=True)
