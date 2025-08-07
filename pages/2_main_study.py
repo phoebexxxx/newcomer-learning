@@ -266,7 +266,7 @@ if "can_continue" not in st.session_state:
 
 # Submit button (stage 1)
 if st.button("Submit Draft") and not st.session_state.submitted:
-    if st.session_state.get("count", 0) >= 0:
+    if st.session_state.get("count", 0) >= 6:
         st.session_state.submitted = True
     else:
         st.markdown(
@@ -280,7 +280,7 @@ if st.button("Submit Draft") and not st.session_state.submitted:
 # Step 2: show download if submitted
 if st.session_state.submitted:
     st.markdown("""
-    Before concluding, please make sure to download the logs from the following button,
+    Before proceeding, please make sure to download the logs from the following button,
     and send them to the researcher at the end of the study. Feel free to keep a copy with you as well.
     """)
 
@@ -553,132 +553,3 @@ if st.session_state.can_continue:
 #                 st.error(f"An error occurred: {e}")
 
 #         st.rerun()
-
-
-
-
-# import streamlit as st
-# import openai
-# import os
-# import requests
-
-# st.set_page_config(page_title="Chat with ScaffoldAI", page_icon="📚")
-
-# st.title("Chat with ScaffoldAI")
-# st.write("You are chatting with ScaffoldAI, an AI chatbot powered by LLM.")
-
-# # Render formatted messages
-# def render_message(role, content):
-#     if role == "user":
-#         st.markdown(
-#             f"""
-#             <div style='background-color:#e6f0ff; padding:10px 15px; border-radius:10px; margin:10px 0;'>
-#                 <strong style='color:#0047ab;'>You:</strong><br>{content}
-#             </div>
-#             """, unsafe_allow_html=True
-#         )
-#     elif role == "assistant":
-#         st.markdown(
-#             f"""
-#             <div style='background-color:#eaffea; padding:10px 15px; border-radius:10px; margin:10px 0;'>
-#                 <strong style='color:#008000;'>GPT:</strong><br>{content}
-#             </div>
-#             """, unsafe_allow_html=True
-#         )
-
-# # Set OpenAI secret key
-# client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
-# # Wikipedia policy titles
-# POLICY_TITLES = {
-#     "Notability": "Wikipedia:Notability",
-#     "Creative Professionals": "Wikipedia:Notability_(people)",
-#     "BLP": "Wikipedia:Biographies_of_living_persons",
-#     "COI": "Wikipedia:Conflict_of_interest",
-#     "Verifiability": "Wikipedia:Verifiability",
-#     "Reliable Sources": "Wikipedia:Reliable_sources",
-#     "No Original Research": "Wikipedia:No_original_research",
-#     "Neutral Point of View": "Wikipedia:Neutral_point_of_view",
-#     "NPOV Tutorial": "Wikipedia:NPOV_tutorial"
-# }
-
-# # Fetch Wikipedia plain text content
-# def fetch_wikipedia_text(title):
-#     url = f"https://en.wikipedia.org/api/rest_v1/page/plain/{title}"
-#     headers = {'User-Agent': 'ScaffoldAI/1.0'}
-#     response = requests.get(url, headers=headers)
-#     if response.status_code == 200:
-#         return response.text
-#     else:
-#         return f"Failed to retrieve content for: {title}"
-
-# # Retrieve relevant policy chunks based on user input
-# def retrieve_relevant_policies(user_query, policy_docs):
-#     relevant_snippets = []
-#     for policy_name, text in policy_docs.items():
-#         if any(word.lower() in text.lower() for word in user_query.split()):
-#             snippet = text[:1000]  # Simplified first-1k-char chunk
-#             relevant_snippets.append(f"=== {policy_name} ===\n{snippet}")
-#     return "\n\n".join(relevant_snippets[:3])
-
-# # Define system prompt
-# system_prompt = """You are a helpful AI assistant designed specifically to support newcomer editors on Wikipedia. Your primary goal is to foster learning by guiding newcomers through active engagement, rather than doing editing tasks for them. Prioritize scaffolded instruction, policy awareness, and community-aligned reasoning. 
-# When a newcomer first asks a question or requests help, always begin by clarifying their intent: what is their [task] and [topic] for the [article] they want to work on? If they include it in their query, do not ask again. 
-# DO NOT perform the task for them unless they’ve already made an attempt. Even then, guide rather than solve. 
-# If a newcomer’s task is complex (e.g. starting a new article or expanding a stub), break it down to smaller, achievable, beginner-friendly steps. This is important for scaffolding. Ask them to take action before giving more feedback. 
-# Retrieve relevant Wikipedia policy and guideline pages based on the user's topic and task. Some specific policy links that might be helpful. Please be sure to provide the actual links to relevant policy pages for the newcomers to click and read. 
-# https://en.wikipedia.org/wiki/Wikipedia:Content_assessment 
-# https://en.wikipedia.org/wiki/Wikipedia:Notability 
-# https://en.wikipedia.org/wiki/Wikipedia:Notability_(people)#Creative_professionals  
-# https://en.wikipedia.org/wiki/Wikipedia:Biographies_of_living_persons 
-# https://en.wikipedia.org/wiki/Wikipedia:Conflict_of_interest 
-# https://en.wikipedia.org/wiki/Wikipedia:Verifiability 
-# https://en.wikipedia.org/wiki/Wikipedia:Reliable_sources 
-# https://en.wikipedia.org/wiki/Wikipedia:No_original_research
-# https://en.wikipedia.org/wiki/Wikipedia:Neutral_point_of_view 
-# https://en.wikipedia.org/wiki/Wikipedia:NPOV_tutorial 
-# When a newcomer makes an attempt (e.g., writes content, finds a source, drafts a sentence), respond with constructive feedback. Simulate responses from the Wikipedia community by referencing how experienced editors might respond using relevant content guidelines and policies.
-# Once the newcomer finishes a task, provide a reflective summary of what they did and what they learned, along with encouragement to continue contributing. 
-# """
-
-# # Initialize chat session
-# if "messages" not in st.session_state:
-#     st.session_state.messages = [{"role": "system", "content": system_prompt}]
-#     st.session_state.policy_docs = {
-#         key: fetch_wikipedia_text(title) for key, title in POLICY_TITLES.items()
-#     }
-
-# # Render chat history
-# for message in st.session_state.messages:
-#     render_message(message["role"], message["content"])
-
-# # Text input
-# user_input = st.text_input("Enter your prompt:", key="user_input")
-
-# if st.button("Send"):
-#     if user_input.strip() == "":
-#         st.warning("Please enter a prompt.")
-#     else:
-#         st.session_state.messages.append({"role": "user", "content": user_input})
-
-#         # Retrieve relevant policy context
-#         retrieved_context = retrieve_relevant_policies(user_input, st.session_state.policy_docs)
-#         if retrieved_context:
-#             st.session_state.messages.insert(
-#                 1,
-#                 {"role": "system", "content": f"Relevant policy context:\n{retrieved_context}"}
-#             )
-
-#         with st.spinner("GPT-4o-mini is thinking..."):
-#             try:
-#                 response = client.chat.completions.create(
-#                     model="gpt-4o-mini",
-#                     messages=st.session_state.messages
-#                 )
-#                 assistant_reply = response.choices[0].message.content
-#                 st.session_state.messages.append({"role": "assistant", "content": assistant_reply})
-#             except Exception as e:
-#                 st.error(f"An error occurred: {e}")
-
-#         st.rerun()
-

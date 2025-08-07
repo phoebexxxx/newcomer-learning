@@ -10,9 +10,10 @@ if not st.session_state.get("followup_done"):
 
 st.set_page_config(page_title="Finish & Thank you", layout="wide")
 
+
 st.markdown("""
             
-🎉 You are all done! Thank you so much for participating in this study. Again, we truly value your participation. 
+🎉 Congratulations, you are all done! Thank you so much for participating in this study. Again, we truly value your participation. 
             
 """)
 
