@@ -266,7 +266,7 @@ if "can_continue" not in st.session_state:
 
 # Submit button (stage 1)
 if st.button("Submit Draft") and not st.session_state.submitted:
-    if st.session_state.get("count", 0) >= 6:
+    if st.session_state.get("count") >= 6:
         st.session_state.submitted = True
     else:
         st.markdown(
