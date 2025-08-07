@@ -141,7 +141,7 @@ with left_col:
     - Spend <u>**the first 5–10 minutes**</u> asking questions, exploring ideas, and planning your Wikipedia edit with the WikiCoach, the AI assistant on the right.
     - Have ***at least 6 total interactions*** with the assistant **throughout the task**. (<u>*1 interaction = a question/request + the assistant’s response.*</u>)    
     - Feel free to keep using the AI assistant throughout the task, eg. get feedback on your edit, ask about policies, or help you find sources.
-    - Write your edit in natural sentences, and <u>provide links for sources <u>**outside of Wikipedia**</u> to your sources/references</u> if you could.    
+    - Write your edit in natural sentences, and <u>provide links for sources <u>**outside of Wikipedia**</u> if you could.    
     - Submit whatever you have -- it's ok if your edit is not finished. We are interested in the process. 
 
     **NOTE**: The AI assistant DOES NOT have access to the Google doc (your edit space).            
