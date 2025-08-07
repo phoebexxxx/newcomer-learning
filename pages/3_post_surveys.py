@@ -1,8 +1,7 @@
 import streamlit as st
 
-
 # ✅ Protect this page
-if not st.session_state.move_on:
+if not st.session_state.get("move_on"):
     st.warning("Please complete the main study before proceeding.")
     st.stop()
 

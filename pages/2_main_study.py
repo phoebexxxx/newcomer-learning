@@ -1,4 +1,6 @@
 import streamlit as st
+import pandas as pd 
+import io
 import openai
 import datetime
 from streamlit_autorefresh import st_autorefresh
@@ -15,10 +17,10 @@ if not st.session_state.get("participant_id") or not st.session_state.get("group
     st.warning("Please complete the participant info before proceeding.")
     st.stop()
 
+
 # Initialize session state
 st.set_page_config(page_title="Main Study", layout="wide")
 st.title("Wikipedia Editing Task")
-
 
 group = st.session_state.get("group")
 GROUP_AGENT_MAP = {
@@ -137,7 +139,7 @@ with left_col:
     - <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*, even if you see it in search results.  
 
     **✅ DOs**
-    - Spend <u>**the first 5–10 minutes**</u> asking questions, exploring ideas, and planning your Wikipedia edit with the wiki-helper AI assistant on the right.
+    - Spend <u>**the first 5–10 minutes**</u> asking questions, exploring ideas, and planning your Wikipedia edit with the WikiCoach, the AI assistant on the right.
     - Have ***at least 6 total interactions*** with the assistant **throughout the task**. (<u>*1 interaction = a question/request + the assistant’s response.*</u>)    
     - Feel free to keep using the AI assistant throughout the task, eg. get feedback on your edit, ask about policies, or help you find sources.
     - Write your edit in natural sentences, and <u>provide links for sources <u>**outside of Wikipedia**</u> to your sources/references</u> if you could.    
@@ -170,8 +172,13 @@ if "count" not in st.session_state:
 # Right column: AI interaction
 with right_col:
 
-    st.subheader("🤖 Chat with Wiki-helper, the AI assistant.")
+    st.subheader("🤖 Chat with WikiCoach, the AI assistant.")
     st.write("Ask questions or requests about editing Wikipedia! If the assistant didn't respond, it is likely because it didn't hear. Simply send your question or request again. It may take some time for the assistant to think.")
+    st.markdown(
+    "<p style='color: red; font-weight: bold;'>Note: WikiCoach may behave differently from other AI you've used before.</p>",
+    unsafe_allow_html=True
+    )
+
 
     for message in st.session_state.messages[1:]:  # Skip system message
         render_message(message["role"], message["content"])
@@ -250,32 +257,110 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.session_state.move_on = False
 
+# Session state setup
+if "submitted" not in st.session_state:
+    st.session_state.submitted = False
+if "can_continue" not in st.session_state:
+    st.session_state.can_continue = False
 
-# now submit button is our navigation
-if st.button("Submit Draft"):
-    if st.session_state.count >= 6: 
-        st.session_state.move_on = True
-        st.switch_page("pages/3_post_surveys.py")  
+# Submit button (stage 1)
+if st.button("Submit Draft") and not st.session_state.submitted:
+    if st.session_state.get("count", 0) >= 0:
+        st.session_state.submitted = True
     else:
         st.markdown(
-        "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
-        f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.'''
-        "</div>",
-        unsafe_allow_html=True
+            "<div style='text-align: center; color: #856404; background-color: #fff3cd; "
+            "padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
+            f"Please have at least {6 - st.session_state.count} more interactions with AI agent."
+            "</div>",
+            unsafe_allow_html=True
         )
-        # st.warning(f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.''')
-else:
-    st.markdown(
-    "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
-    "Please submit your finished draft."
-    "</div>",
-    unsafe_allow_html=True
-    )
-        
 
+# Step 2: show download if submitted
+if st.session_state.submitted:
+    st.markdown("""
+    Before concluding, please make sure to download the logs from the following button,
+    and send them to the researcher at the end of the study. Feel free to keep a copy with you as well.
+    """)
+
+    if "logs" in st.session_state and st.session_state.logs:
+        df = pd.DataFrame(st.session_state.logs)
+        csv_buffer = io.StringIO()
+        df.to_csv(csv_buffer, index=False)
+
+        downloaded = st.download_button(
+            label="📁 Download Interaction Log (CSV)",
+            data=csv_buffer.getvalue(),
+            file_name=f"interaction_log{p_id}.csv",
+            mime="text/csv"
+        )
+
+        # When download button is clicked, allow continuing
+        if downloaded:
+            st.session_state.can_continue = True
+    else:
+        st.info("No interaction logs found.")
+
+# Step 3: Continue button
+if st.session_state.can_continue:
+    if st.button("✅ Continue to Post-Survey"):
+        st.session_state.move_on = True
+        st.switch_page("pages/3_post_surveys.py")
+
+
+
+
+# # now submit button is our navigation
+# if st.button("Submit Draft"):
+#     if st.session_state.count >= 0: 
+#         st.session_state.move_on = True
+#         st.switch_page("pages/3_post_surveys.py")  
+#     else:
+#         st.markdown(
+#         "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
+#         f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.'''
+#         "</div>",
+#         unsafe_allow_html=True
+#         )
+#         # st.warning(f'''Please have at least {6 - st.session_state.count} more interactions with AI agent.''')
+# else:
+#     st.markdown(
+#     "<div style='text-align: center; color: #856404; background-color: #fff3cd; padding: 1em; border-radius: 5px; border: 1px solid #ffeeba;'>"
+#     "Please submit your finished draft."
+#     "</div>",
+#     unsafe_allow_html=True
+#     )
         
+        
+# st.title("Download your logs")
+
+# st.markdown("""
+
+# Before concluding, please make sure to download the logs from the following button, and send to the researcher right now. 
+# Feel free to keep a copy with you as well.        
+
+# """)
+
+# if "logs" in st.session_state and st.session_state.logs:
+#     # Create DataFrame from structured logs
+#     df = pd.DataFrame(st.session_state.logs)
+
+#     # Create in-memory buffer to hold CSV
+#     csv_buffer = io.StringIO()
+#     df.to_csv(csv_buffer, index=False)
+
+#     # Download button for CSV
+#     st.download_button(
+#         label="📁 Download Interaction Log (CSV)",
+#         data=csv_buffer.getvalue(),
+#         file_name="interaction_log.csv",
+#         mime="text/csv"
+#     )
+# else:
+#     st.info("No interaction logs found.")
+
+
 
 
 
