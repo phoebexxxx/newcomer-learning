@@ -126,7 +126,7 @@ with left_col:
     st.subheader("✍️ Your task: Contribute to Wikipedia as a new editor")
 
     st.markdown("""
-    You will be working on a short Wikipedia article about the Australian sculptor ***Bronwyn Oliver***. Your job is to help improve this article by expanding it with content that fits Wikipedia. 
+    You will be working on a short Wikipedia article about the Australian sculptor ***Bronwyn Oliver***. Your job is to help improve this article by expanding it with content that aligns with Wikipedia policies and guidelines. 
                 
     **Your task:**  
     - Use **WikiCoach**, an AI assistant on the right, to help you think and edit the task. Start <u>**the first 5–10 minutes**</u> talking with **WikiCoach**, 

@@ -28,7 +28,7 @@ FOLLOW_SAND = follow_sand.follow_sand(int(p_id)-1)
 st.markdown("""
 ### ✍️ Task Description
 
-Now, please improve the article about a Dutch soccer player ***Manon Melis*** on Wikipedia. Your job is to add well-sourced content that fits Wikipedi's standards. 
+Now, please improve the article about a Dutch soccer player ***Manon Melis*** on Wikipedia. Your job is to add well-sourced content that aligns with Wikipedia policies. 
 You can add as many words, sentences, and references as you want. 
             
 ⏰ **Time limit:** No time limit, recommended 30 minutes
