@@ -129,7 +129,8 @@ with left_col:
     You will be working on a short Wikipedia article about the Australian sculptor ***Bronwyn Oliver***. Your job is to help improve this article by expanding it with content that fits Wikipedia. 
                 
     **Your task:**  
-    - Use **WikiCoach**, an AI assistant on the right, to help you think and edit the task. You can ask questions, explore ideas, or get feedback as you go. 
+    - Use **WikiCoach**, an AI assistant on the right, to help you think and edit the task. Start <u>**the first 5–10 minutes**</u> talking with **WikiCoach**, 
+                and feel free to keep using it throughout this task. You can ask questions, explore ideas, or get feedback as you go.
     - Add ***about 100 words*** and ***at least 2 references***. 
     This is not a personal writing assignment — the goal is <u>to practice making a Wikipedia-style contribution</u>.
 
@@ -140,9 +141,7 @@ with left_col:
     - <u>**DO NOT open or read**</u> the current Wikipedia article named *Bronwyn Oliver*.  
 
     **✅ DOs**
-    - Spend <u>**the first 5–10 minutes**</u> talking with **WikiCoach**, the AI assistant on the right.
     - Have ***at least 6 total interactions*** with the assistant **throughout the task**. (<u>*1 interaction = a question/request + the assistant’s response.*</u>)    
-    - Feel free to keep using **WikiCoach** throughout this task.
     - You are allowed to search for <u>**sources outside of Wikipedia**</u> on your own, and include links for sources if you could.    
     - Submit whatever you have -- it's ok if your edit is not finished. We are interested in the process. 
 
