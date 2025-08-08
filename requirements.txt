@@ -4,4 +4,6 @@ streamlit==1.37.1
 openai==1.93.3
 streamlit_autorefresh
 faiss-cpu
-sentence-transformers
+torch==2.2.2
+sentence-transformers==2.2.2
+transformers==4.36.2
