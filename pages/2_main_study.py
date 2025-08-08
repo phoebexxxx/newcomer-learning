@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd 
 import io
 import openai
+import os
 import datetime
 from streamlit_autorefresh import st_autorefresh
 from agents import agent_a, agent_b
@@ -22,6 +23,15 @@ if not st.session_state.get("participant_id") or not st.session_state.get("group
 st.set_page_config(page_title="Main Study", layout="wide")
 st.title("Wikipedia Editing Task")
 
+# Streamlit-safe setup
+os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "1"
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+
+# Force CPU (safe across all environments)
+device = "cpu"
+
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', device=device)
+
 group = st.session_state.get("group")
 GROUP_AGENT_MAP = {
     "Group A": agent_a.system_prompt(),
@@ -34,7 +44,7 @@ system_prompt = GROUP_AGENT_MAP[group]
 p_id = st.session_state.get("participant_id")
 MAIN_SAND = main_sand.main_sand(int(p_id)-1)
 
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+
 
 # load both text & embeddings
 index = faiss.read_index("rag/faiss.index")
