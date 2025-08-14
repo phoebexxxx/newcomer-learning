@@ -183,7 +183,7 @@ if "count" not in st.session_state:
 with right_col:
 
     st.subheader("🤖 Chat with WikiCoach, the AI assistant.")
-    st.write("You can ask WikiCoach questions, follow up on its answers, or explore ideas together. The more you talk with it, the more helpful it can be. If the assistant didn't respond, it is likely because it didn't receive your message. Simply send your question or request again. It may take a moment for the assistant to think.")
+    st.write("WikiCoach is an AI helper for you to edit Wikipedia. It's designed both to help you complete edits, and learn about important Wikipedia policies and editing skills along the way. You can ask WikiCoach questions, follow up on its answers, or explore ideas together. The more you talk with it, the more helpful it can be. If the assistant didn't respond, it is likely because it didn't receive your message. Simply send your question or request again. It may take a moment for the assistant to think.")
     st.markdown(
     "<p style='color: red; font-weight: bold;'>Note: WikiCoach may behave differently from other AI you've used before.</p>",
     unsafe_allow_html=True
